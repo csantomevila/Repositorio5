@@ -1,0 +1,69 @@
+1-Creacion de Ficheros de Configuracion 
+
+root@christian-VirtualBox:~# mkdir bind9-docker
+root@christian-VirtualBox:~# mkdir -p named/etc/bind
+root@christian-VirtualBox:~# mkdir -p named/var/cache/bind
+root@christian-VirtualBox:~# mkdir -p named/var/lib/bind
+root@christian-VirtualBox:~# mkdir -p named/var/log
+root@christian-VirtualBox:~# mkdir -p named/var/run
+root@christian-VirtualBox:~# touch docker-compose.yml
+root@christian-VirtualBox:~# touch README.md
+root@christian-VirtualBox:~# 
+
+
+2- Contenido Fichero dOcker-compose.yml
+
+  GNU nano 2.9.3                 docker-compose.yml                 Modificado  
+
+version: '3.8' --> Version del fichero de configuracion 
+
+services: ->servicios que se van a ejecutar en los contenedores
+  bind9: -->nombre del servicio que estás creando
+    image: internetsystemsconsortium/bind9:9.18 --> Indica la imagen de Docker que se utilizará para crear el contenedor.
+    container_name: bind9 --> Asigna un nombre al contenedor.
+    ports: --> define los puertos que se exponen para que el contenedor sea accesible desde fuera
+      - "53:53/tcp"
+      - "53:53/udp"
+    volumes: --> permiten montar directorios o archivos del host en el contenedor, 
+      - ./named.conf.options:/etc/bind/named.conf.options
+      - ./zones:/etc/bind/zones
+      - ./logs:/var/log/bind
+    restart: unless-stopped
+
+
+3. Ejecutar Docker Compose
+
+
+
+docker-compose up -d
+
+Esto levantará el contenedor con el servicio de DNS BIND9
+
+4- SUbir todo a Git
+
+git init
+git add docker-compose.yml 
+git commit
+
+# Por favor ingresa el mensaje del commit para tus cambios. Las
+#  líneas que comiencen con '#' serán ignoradas, y un mensaje
+#  vacío aborta el commit.
+#
+# En la rama master
+#
+# Confirmación inicial
+#
+# Cambios a ser confirmados:
+#       nuevo archivo:  README.md
+#       nuevo archivo:  docker-compose.yml
+#
+
+
+
+
+
+
+
+git remote add origin https://github.com/tu-usuario/bind9-docker-setup.git
+git push -u origin master
+
